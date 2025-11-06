@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       validate(value) {
+        // by default these validator functions only be called while creating a new data
         if (!validator.isEmail(value)) {
           throw new Error("Email is not valid" + " " + value);
         }
