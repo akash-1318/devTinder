@@ -18,8 +18,13 @@ authRouter.post("/signup", async (req, res) => {
       password: hashedPassword,
     });
 
-    await user.save();
-    res.send("User signed up successfully");
+    const savedUser = await user.save();
+    const token = await savedUser.getJWT();
+    res.cookie("token", token, {
+      expires: new Date(Date.now() + 8 * 3600000),
+    });
+
+    res.json({ message: "User signed up successfully", data: savedUser });
   } catch (err) {
     res.status(400).send("error signing up user" + " " + err.message);
   }
@@ -44,8 +49,10 @@ authRouter.post("/login", async (req, res) => {
       const token = await user.getJWT();
       // ---> we can set the expiry of jwt and cookies.
       // Add the token to cookie and send the response back to the user
-      res.cookie("token", token);
-      res.send("User signed in successfully");
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 8 * 3600000), // cookie will expire in 8 hours
+      });
+      res.send(user);
     }
   } catch (err) {
     res.status(400).send("error signing up user" + " " + err.message);

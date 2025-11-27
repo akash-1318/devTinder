@@ -2,7 +2,8 @@ const express = require("express");
 const profileRouter = express.Router();
 const { userAuth } = require("../middlewares");
 const { validateProfileEditData } = require("../utils/validation");
-const User = require("../models/user");
+const bcrypt = require("bcrypt");
+const validator = require("validator");
 
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
   try {
@@ -33,24 +34,32 @@ profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
 
 profileRouter.patch("/profile/password", userAuth, async (req, res) => {
   try {
-    const { emailId, password } = req?.body;
-    const user = await User.findOne({ emailId });
-    if (!user) {
+    const { currentPassword, newPassword } = req?.body || {};
+    if (!currentPassword || !newPassword) {
+      throw new Error("Current password and new password are required");
+    }
+
+    if (!validator.isStrongPassword(newPassword)) {
+      throw new Error("Password is not strong enough");
+    }
+
+    const loggedInUser = req.user;
+    const isPasswordMatch = await loggedInUser.validatePassword(
+      currentPassword
+    );
+    if (!isPasswordMatch) {
       throw new Error("Invalid credentials");
     }
-    const isPasswordMatch = await user.validatePassword(password);
-    if (!isPasswordMatch && !Object.keys(req.body).includes("password")) {
-      throw new Error("Invalid credentials");
-    } else {
-      const loggedInUser = req.user;
-      loggedInUser.password = req.user.password;
-      await loggedInUser.save();
-      const token = await user.getJWT();
-      res.cookie("token", token);
-      res.send("User signed in successfully");
-    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    loggedInUser.password = hashedPassword;
+    await loggedInUser.save();
+
+    const token = await loggedInUser.getJWT();
+    res.cookie("token", token);
+    res.send("Password updated successfully");
   } catch (err) {
-    res.status(400).send("error signing up user" + " " + err.message);
+    res.status(400).send("error updating password" + " " + err.message);
   }
 });
 

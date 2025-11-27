@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     firstName: {
       type: String,
       required: true,
+      // index: true,  // this will create index for firstname (Suppose you have millions of data in DB by doing this the search will become easy in database)
       minLength: 4,
     },
     lastName: {
@@ -18,7 +19,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       required: true,
       index: true,
-      unique: true,
+      unique: true, // here mongodb will automatically create index for this
       trim: true,
       validate(value) {
         // by default these validator functions only be called while creating a new data
@@ -42,11 +43,15 @@ const userSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      validate(value) {
-        if (!["male", "female", "others"].includes(value)) {
-          throw new Error("Gender Data is not valid");
-        }
+      enum: {
+        values: ["male", "female", "others"],
+        message: `{VALUE} is not valid gender`,
       },
+      // validate(value) {
+      //   if (!["male", "female", "others"].includes(value)) {
+      //     throw new Error("Gender Data is not valid");
+      //   }
+      // },
     },
     photoUrl: {
       type: String,
