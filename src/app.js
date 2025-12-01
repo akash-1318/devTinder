@@ -5,6 +5,8 @@ const User = require("./models/user");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
+require("dotenv").config();
+
 const app = express();
 
 // For get it will match the exact path but for use '/user' can fall under '/'
