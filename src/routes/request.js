@@ -4,6 +4,8 @@ const { userAuth } = require("../middlewares");
 const ConnectionRequest = require("../models/connectionRequest");
 const User = require("../models/user");
 
+const sendEmail = require("../utils/sendEmail");
+
 requestRouter.post(
   "/request/send/:status/:userId",
   userAuth,
@@ -44,6 +46,12 @@ requestRouter.post(
       });
 
       const data = await connectionRequest.save();
+
+      const emailRes = await sendEmail.run(
+        "A new friend request from " + req.user.firstName,
+        req.user.firstName + " is " + status + " in " + toUser.firstName
+      );
+      console.log("Email sent response:", emailRes);
       res.json({
         message: `Request ${status}ed successfully`,
         data,
