@@ -53,6 +53,13 @@ const userSchema = new mongoose.Schema(
       //   }
       // },
     },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
+    membershipType: {
+      type: String,
+    },
     photoUrl: {
       type: String,
       default: "https://i.sstatic.net/l60Hf.png",
