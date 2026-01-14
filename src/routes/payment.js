@@ -8,6 +8,7 @@ const { membershipAmount } = require("../utils/constants");
 const {
   validateWebhookSignature,
 } = require("razorpay/dist/utils/razorpay-utils");
+const User = require("../models/user");
 
 paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   try {
@@ -100,7 +101,7 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
 
 paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
   const user = req.user.toJSON();
-  console.log(user);
+  console.log("user premium status", user);
   if (user.isPremium) {
     return res.json({ ...user });
   }
