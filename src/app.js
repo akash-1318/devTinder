@@ -4,6 +4,7 @@ require("./config/database");
 const User = require("./models/user");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const http = require("http");
 
 require("dotenv").config();
 
@@ -58,7 +59,7 @@ app.use(
   cors({
     origin: "http://localhost:5173",
     credentials: true,
-  })
+  }),
 );
 app.use(express.json()); // to read the json data coming in request
 app.use(cookieParser());
@@ -125,17 +126,23 @@ const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/request");
 const userRouter = require("./routes/user");
 const paymentRouter = require("./routes/payment");
+const initializeSocket = require("./utils/socket");
+const chatRouter = require("./routes/chat");
 
 app.use("/", authRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
 app.use("/", paymentRouter);
+app.use("/", chatRouter);
+
+const server = http.createServer(app);
+initializeSocket(server);
 
 connectDB()
   .then(() => {
     console.log("Connection successfull!");
-    app.listen(3000, () => {
+    server.listen(3000, () => {
       console.log("Server is running on port 3000");
     });
   })
