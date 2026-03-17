@@ -14,8 +14,9 @@ userRouter.get("/user/requests/received", userAuth, async (req, res) => {
         status: "interested",
       })
       .populate(
+        // populate to get the user details from user collection (Building relation between two tables)
         "fromUserId",
-        "firstName lastName age gender about skills photoUrl"
+        "firstName lastName age gender about skills photoUrl",
       );
     //   .populate("fromUserId", [
     //     "firstName",
@@ -44,11 +45,11 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
       })
       .populate(
         "fromUserId",
-        "firstName lastName age gender about skills photoUrl"
+        "firstName lastName age gender about skills photoUrl",
       )
       .populate(
         "toUserId",
-        "firstName lastName age gender about skills photoUrl"
+        "firstName lastName age gender about skills photoUrl",
       );
 
     const data = connectionRequests.map((request) => {

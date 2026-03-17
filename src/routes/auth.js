@@ -35,7 +35,7 @@ authRouter.post("/login", async (req, res) => {
   // - wrapped it inside a cookie and send it to browser.Now for each api request server will validate this cookie and only thn it will send response.
   try {
     const { emailId, password } = req?.body;
-    const user = await User.findOne({ emailId }); // User is the model for which I'm getting dat from database
+    const user = await User.findOne({ emailId }); // User is the model for which I'm getting data from database
     if (!user) {
       throw new Error("Invalid credentials");
     }
