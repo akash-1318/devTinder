@@ -3,6 +3,12 @@ const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
+// A schema defines what your data should look like.
+
+// A model is created from a schema and is used to: insert, query, update, delete records in the database collection corresponding to that model.
+
+// A collection is where actual documents are stored.  ---> SQL → Table, MongoDB → Collection
+
 const userSchema = new mongoose.Schema(
   {
     firstName: {
@@ -77,7 +83,7 @@ const userSchema = new mongoose.Schema(
       type: [String],
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // This is schema method to create jwt token
@@ -96,7 +102,7 @@ userSchema.methods.validatePassword = async function (passwordInputByUser) {
 
   const isPasswordValid = await bcrypt.compare(
     passwordInputByUser,
-    passwordHash
+    passwordHash,
   );
   return isPasswordValid;
 };

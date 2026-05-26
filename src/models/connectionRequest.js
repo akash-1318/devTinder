@@ -22,8 +22,10 @@ const connectionRequestSchema = new mongoose.Schema(
       },
     },
   },
-  { timestamp: true }
+  { timestamp: true },
 );
+
+// When I index my db, APIs become faster and I can index certain fields. because it will create a separate data structure to store the indexed fields and their corresponding document references, allowing for quick lookups. However, indexing can also slow down write operations (like insert, update, delete) because the index needs to be updated every time a document is modified. Therefore, it's important to choose which fields to index based on the query patterns of your application.
 
 // Compound Index (This will make the query Fast)
 connectionRequestSchema.index({ fromUserId: 1, toUserId: 1 });
