@@ -16,3 +16,28 @@ console.log("hello", composedFn(3)) // (3 + 1) * 2 - 10 => -2
 
 // .......................................
 
+
+// setCancellableInterval(): Implement a function similar to setInterval() that returns a function to cancel the interval instead of an ID.
+
+// const cancel = setCancellableInterval(args)
+
+
+function setCancellableInterval(fn, delay){
+  const fnInterval = setInterval(()=>{
+    fn()
+  }, delay)
+return function cancel(){
+  clearInterval(fnInterval)
+}
+}
+
+function test(){
+  console.log("hello world")
+}
+
+const cancel = setCancellableInterval(test, 1000);
+
+setTimeout(()=>{
+  cancel()
+  console.log("hello interval")
+}, 2000)
