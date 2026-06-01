@@ -61,3 +61,26 @@ function longestCommonPrefix(strs) {
 
 const strings = ["flower", "flow", "flight"];
 console.log(longestCommonPrefix(strings)); // Output: "fl"
+
+
+// Function to find the most frequent element in an array. If there are multiple elements with the same highest frequency, return any one of them.
+
+function mostFrequentElement(arr) {
+  const frequencyMap = {};
+  let maxFrequency = 0;
+  let mostFrequent = null;
+
+  for (const num of arr) {
+    frequencyMap[num] = (frequencyMap[num] || 0) + 1;
+
+    if (frequencyMap[num] > maxFrequency) {
+      maxFrequency = frequencyMap[num];
+      mostFrequent = num;
+    }
+  }
+
+  return mostFrequent;
+}
+
+const array = [1, 2, 3, 2, 4, 1, 2];
+console.log(mostFrequentElement(array)); // Output: 2
