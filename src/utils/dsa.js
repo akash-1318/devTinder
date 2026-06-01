@@ -84,3 +84,15 @@ function mostFrequentElement(arr) {
 
 const array = [1, 2, 3, 2, 4, 1, 2];
 console.log(mostFrequentElement(array)); // Output: 2
+
+// Given two integers a and b, return the sum of the two integers without using the operators + and -
+function getSum(a, b) {
+  while (b !== 0) {
+    const carry = a & b; // Calculate carry
+    a = a ^ b; // Sum of bits of a and b where at least one of the bits is not set
+    b = carry << 1; // Carry is shifted by one so that it can be added in the next iteration
+  }
+  return a;
+}
+
+console.log(getSum(5, 3)); // Output: 8
