@@ -96,3 +96,25 @@ function getSum(a, b) {
 }
 
 console.log(getSum(5, 3)); // Output: 8
+
+
+// Flatten a Nested Array
+function flattenArray(arr) {
+  const result = [];
+  
+  function flattenHelper(subArr) {
+    for (const item of subArr) {
+      if (Array.isArray(item)) {
+        flattenHelper(item); // Recursively flatten nested arrays
+      } else {
+        result.push(item); // Push non-array items to the result
+      }
+    }
+  }
+  
+  flattenHelper(arr);
+  return result;
+}
+
+const nestedArray = [1, [2, [3, 4], 5], 6];
+console.log(flattenArray(nestedArray)); // Output: [1, 2, 3, 4, 5, 6]
